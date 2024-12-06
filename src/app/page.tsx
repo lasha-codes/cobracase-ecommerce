@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { Check, Star } from 'lucide-react'
 import Phone from '@/components/Phone'
 import { Icons } from '@/components/icons'
+import { Reviews } from '@/components/Reviews'
 
 const Home = () => {
   return (
@@ -217,7 +218,9 @@ const Home = () => {
           </div>
         </MaxWidthWrapper>
 
-        <div className='pt-16'></div>
+        <div className='pt-16'>
+          <Reviews />
+        </div>
       </section>
     </div>
   )
