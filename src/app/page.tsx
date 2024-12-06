@@ -1,12 +1,14 @@
+/* eslint-disable @next/next/no-img-element */
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
 import Image from 'next/image'
 import { Check, Star } from 'lucide-react'
+import Phone from '@/components/Phone'
 
 const Home = () => {
   return (
     <div className='bg-slate-50'>
       <section>
-        <MaxWidthWrapper className='pb-24 pt-10 lg:grid-cols-3 sm:pb-32 lg:gap-x-0 xl:gap-x-8 lg:pt-24 xl:pt-32 lg:pb-52'>
+        <MaxWidthWrapper className='pb-24 pt-10 lg:grid lg:grid-cols-3 sm:pb-32 lg:gap-x-0 xl:gap-x-8 lg:pt-24 xl:pt-32 lg:pb-52'>
           <div className='col-span-2 px-6 lg:px-0 lg:pt-4'>
             <div className='relative mx-auto text-center lg:text-left flex flex-col items-center lg:items-start'>
               <div className='absolute w-28 left-0 -top-20 hidden lg:block'>
@@ -88,7 +90,7 @@ const Home = () => {
                   </div>
 
                   <p>
-                    <span className='font-semibold'>1.250</span>happy customers
+                    <span className='font-semibold'>1.250</span> happy customers
                   </p>
                 </div>
               </div>
@@ -96,12 +98,10 @@ const Home = () => {
           </div>
 
           <div className='col-span-full lg:col-span-1 w-full flex justify-center px-8 sm:px-16 md:px-0 mt-32 lg:mx-0 lg:mt-20 h-fit'>
-            <div className='relative max-w-xl'>
-              <Image
+            <div className='relative max-md:max-w-xl'>
+              <img
                 src='/your-image.png'
                 className='absolute w-40 lg:w-52 left-56 -top-20 select-none hidden sm:block lg:hidden xl:block'
-                fill
-                priority
                 alt=''
               />
               <Image
@@ -111,6 +111,7 @@ const Home = () => {
                 width={80}
                 height={80}
               />
+              <Phone className='w-64' imgSrc='/testimonials/1.jpg' />
             </div>
           </div>
         </MaxWidthWrapper>
