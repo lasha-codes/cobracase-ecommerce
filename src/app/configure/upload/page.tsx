@@ -1,67 +1,66 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable jsx-a11y/alt-text */
 'use client'
 
 import { Progress } from '@/components/ui/progress'
+import { useToast } from '@/hooks/use-toast'
 import { useUploadThing } from '@/lib/uploadthing'
 import { cn } from '@/lib/utils'
-import {
-  Image as ImageIcon,
-  Loader2,
-  MousePointerSquareDashed,
-} from 'lucide-react'
+import { Image, Loader2, MousePointerSquareDashed } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import Dropzone, { FileRejection } from 'react-dropzone'
-import { useToast } from '@/hooks/use-toast'
 
 const Page = () => {
   const { toast } = useToast()
-  const router = useRouter()
   const [isDragOver, setIsDragOver] = useState<boolean>(false)
   const [uploadProgress, setUploadProgress] = useState<number>(0)
-  const [isPending, startTransition] = useTransition()
+  const router = useRouter()
 
-  const { startUpload } = useUploadThing('imageUploader', {
+  const { startUpload, isUploading } = useUploadThing('imageUploader', {
     onClientUploadComplete: ([data]) => {
       const configId = data.serverData?.configId
       startTransition(() => {
         router.push(`/configure/design?id=${configId}`)
       })
     },
-    onUploadProgress(progress) {
-      setUploadProgress(progress)
+    onUploadProgress(p) {
+      setUploadProgress(p)
     },
   })
 
   const onDropRejected = (rejectedFiles: FileRejection[]) => {
     const [file] = rejectedFiles
+
     setIsDragOver(false)
 
     toast({
-      title: `${file.file.type} type is not supported`,
+      title: `${file.file.type} type is not supported.`,
       description: 'Please choose a PNG, JPG, or JPEG image instead.',
       variant: 'destructive',
     })
   }
-  const onDropAcepted = (aceptedFiles: File[]) => {
-    startUpload(aceptedFiles, { configId: undefined })
+
+  const onDropAccepted = (acceptedFiles: File[]) => {
+    startUpload(acceptedFiles, { configId: undefined })
 
     setIsDragOver(false)
   }
 
-  const isUploading = false
+  const [isPending, startTransition] = useTransition()
 
   return (
     <div
       className={cn(
         'relative h-full flex-1 my-16 w-full rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:rounded-2xl flex justify-center flex-col items-center',
-        { 'ring-blue-900/25 bg-blue-900/10': isDragOver }
+        {
+          'ring-blue-900/25 bg-blue-900/10': isDragOver,
+        }
       )}
     >
       <div className='relative flex flex-1 flex-col items-center justify-center w-full'>
         <Dropzone
           onDropRejected={onDropRejected}
-          onDropAccepted={onDropAcepted}
+          onDropAccepted={onDropAccepted}
           accept={{
             'image/png': ['.png'],
             'image/jpeg': ['.jpeg'],
@@ -81,9 +80,9 @@ const Page = () => {
               ) : isUploading || isPending ? (
                 <Loader2 className='animate-spin h-6 w-6 text-zinc-500 mb-2' />
               ) : (
-                <ImageIcon className='h-6 w-6 text-zinc-500 mb-2' />
+                <Image className='h-6 w-6 text-zinc-500 mb-2' />
               )}
-              <div className='flex flex-col justify-start mb-2 text-sm text-zinc-700'>
+              <div className='flex flex-col justify-center mb-2 text-sm text-zinc-700'>
                 {isUploading ? (
                   <div className='flex flex-col items-center'>
                     <p>Uploading...</p>
@@ -94,17 +93,16 @@ const Page = () => {
                   </div>
                 ) : isPending ? (
                   <div className='flex flex-col items-center'>
-                    <p>Redirecting, please wait... </p>
+                    <p>Redirecting, please wait...</p>
                   </div>
                 ) : isDragOver ? (
                   <p>
-                    <span className='font-semibold'>Drop File</span>
-                    to upload
+                    <span className='font-semibold'>Drop file</span> to upload
                   </p>
                 ) : (
                   <p>
-                    <span className='font-semibold'>Click to upload </span>
-                    or drag and drop
+                    <span className='font-semibold'>Click to upload</span> or
+                    drag and drop
                   </p>
                 )}
               </div>
