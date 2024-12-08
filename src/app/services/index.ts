@@ -5,7 +5,7 @@ import { db } from '@/db'
 import sharp from 'sharp'
 import { ClientUploadedFileData } from 'uploadthing/types'
 
-export const createConfiguration = async (
+export const afterUpload = async (
   configId: string | null,
   file: ClientUploadedFileData<any>
 ) => {
@@ -40,4 +40,14 @@ export const createConfiguration = async (
   } catch (err) {
     console.error('error creating configuration', err)
   }
+}
+
+export const getConfiguration = async (id: string) => {
+  const configuration = await db.configuration.findUnique({
+    where: {
+      id: id,
+    },
+  })
+
+  return configuration
 }

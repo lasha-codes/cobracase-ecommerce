@@ -10,7 +10,7 @@ import { Image, Loader2, MousePointerSquareDashed } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import Dropzone, { FileRejection } from 'react-dropzone'
-import { createConfiguration } from '@/app/services'
+import { afterUpload } from '@/app/services'
 
 const Page = () => {
   const { toast } = useToast()
@@ -28,10 +28,7 @@ const Page = () => {
         const file = files[0]
 
         // @ts-ignore
-        const { configId }: { configId: string } = await createConfiguration(
-          null,
-          file
-        )
+        const { configId }: { configId: string } = await afterUpload(null, file)
 
         startTransition(() => {
           router.push(`/configure/design?id=${configId}`)
