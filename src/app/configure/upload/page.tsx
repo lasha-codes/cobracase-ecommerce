@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable jsx-a11y/alt-text */
 'use client'
 
@@ -9,6 +10,7 @@ import { Image, Loader2, MousePointerSquareDashed } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import Dropzone, { FileRejection } from 'react-dropzone'
+import { createConfiguration } from '@/app/services'
 
 const Page = () => {
   const { toast } = useToast()
@@ -17,11 +19,31 @@ const Page = () => {
   const router = useRouter()
 
   const { startUpload, isUploading } = useUploadThing('imageUploader', {
-    onClientUploadComplete: ([data]) => {
-      const configId = data.serverData?.configId
-      startTransition(() => {
-        router.push(`/configure/design?id=${configId}`)
-      })
+    onClientUploadComplete: async (files) => {
+      try {
+        if (!files || files.length === 0) {
+          throw new Error('No files uploaded')
+        }
+
+        const file = files[0]
+
+        // @ts-ignore
+        const { configId }: { configId: string } = await createConfiguration(
+          null,
+          file
+        )
+
+        startTransition(() => {
+          router.push(`/configure/design?id=${configId}`)
+        })
+      } catch (err) {
+        toast({
+          title: 'Error',
+          description: 'Failed to create configuration.',
+          variant: 'destructive',
+        })
+        console.error('Error during upload and configuration:', err)
+      }
     },
     onUploadProgress(p) {
       setUploadProgress(p)
