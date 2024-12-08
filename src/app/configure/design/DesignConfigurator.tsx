@@ -6,9 +6,10 @@ import { cn } from '@/lib/utils'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 import NextImage from 'next/image'
 import { Rnd } from 'react-rnd'
-import { RadioGroup } from '@headlessui/react'
+import { RadioGroup, Radio } from '@headlessui/react'
 import { useState } from 'react'
 import { COLORS } from '@/validators/option-validator'
+import { Label } from '@/components/ui/label'
 
 interface DesignConfiguratorProps {
   configId: string
@@ -49,7 +50,7 @@ const DesignConfigurator = ({
           <div
             className={cn(
               'absolute inset-0 left-[3px] top-px right-[3px] bottom-px rounded-[32px]',
-              `bg-zinc-950`
+              `bg-${options.color.tw} transition-all duration-100 ease-linear`
             )}
           />
         </div>
@@ -104,7 +105,32 @@ const DesignConfigurator = ({
                     color: val,
                   }))
                 }}
-              ></RadioGroup>
+              >
+                <Label>Color: {options.color.label}</Label>
+                <div className='mt-3 flex items-center space-x-3'>
+                  {COLORS.map((color) => (
+                    <Radio
+                      key={color.label}
+                      value={color}
+                      className={({ checked }) =>
+                        cn(
+                          'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 active:ring-0 focus:ring-0 active:outline-none focus:outline-none border-2 border-transparent transition duration-200 ease-linear hover:opacity-90',
+                          {
+                            [`border-${color.tw}`]: checked,
+                          }
+                        )
+                      }
+                    >
+                      <div
+                        className={cn(
+                          `bg-${color.tw}`,
+                          'h-8 w-8 rounded-full border border-black border-opacity-10'
+                        )}
+                      ></div>
+                    </Radio>
+                  ))}
+                </div>
+              </RadioGroup>
             </div>
           </div>
         </ScrollArea>
