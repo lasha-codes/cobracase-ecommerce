@@ -41,3 +41,5 @@ export const MODELS = {
     },
   ],
 } as const
+
+console.log('going out')
