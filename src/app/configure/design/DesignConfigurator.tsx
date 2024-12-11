@@ -6,9 +6,19 @@ import { cn } from '@/lib/utils'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 import NextImage from 'next/image'
 import { Rnd } from 'react-rnd'
-import { RadioGroup, Radio } from '@headlessui/react'
+import {
+  RadioGroup,
+  Radio,
+  Label as RadioLabel,
+  Description,
+} from '@headlessui/react'
 import { useState } from 'react'
-import { COLORS, MODELS } from '@/validators/option-validator'
+import {
+  COLORS,
+  FINISHES,
+  MATERIALS,
+  MODELS,
+} from '@/validators/option-validator'
 import { Label } from '@/components/ui/label'
 import {
   DropdownMenu,
@@ -36,9 +46,13 @@ const DesignConfigurator = ({
   const [options, setOptions] = useState<{
     color: (typeof COLORS)[number]
     model: (typeof MODELS.options)[number]
+    material: (typeof MATERIALS.options)[number]
+    finish: (typeof FINISHES.options)[number]
   }>({
     color: COLORS[0],
     model: MODELS.options[0],
+    material: MATERIALS.options[0],
+    finish: FINISHES.options[0],
   })
 
   return (
@@ -56,7 +70,7 @@ const DesignConfigurator = ({
               className='pointer-events-none z-[50] select-none'
             />
           </AspectRatio>
-          <div className='absolute z-40 inset-0 left-[3px] top-px right-[3px] bottom-px rounded-[32px] shadow-[0_0_0_99999px_rgba(229,231,235,0.6)]' />
+          <div className='absolute z-40 inset-0 left-[3px] top-px right-[3px] bottom-px rounded-[32px]' />
           <div
             className={cn(
               'absolute inset-0 left-[3px] top-px right-[3px] bottom-px rounded-[32px]',
@@ -94,11 +108,6 @@ const DesignConfigurator = ({
 
       <div className='h-[37.5rem] flex flex-col bg-white'>
         <ScrollArea className='relative flex-1 overflow-auto'>
-          <div
-            aria-hidden='true'
-            className='absolute z-10 inset-x-0 bottom-0 h-12 bg-gradient-to-t from-white pointer-events-none'
-          />
-
           <div className='px-8 pb-12 pt-8'>
             <h2 className='tracking-tight font-bold text-3xl'>
               Customize your case
@@ -155,7 +164,7 @@ const DesignConfigurator = ({
                         {options.model.label}
                         <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                       </Button>
-                    </DropdownMenuTrigger>
+                    </DropdownMenuTrigger>{' '}
                     <DropdownMenuContent>
                       {MODELS.options.map((model) => (
                         <DropdownMenuItem
@@ -188,6 +197,61 @@ const DesignConfigurator = ({
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
+
+                {[MATERIALS, FINISHES].map(
+                  ({ name, options: selectableOptions }) => (
+                    <RadioGroup
+                      key={name}
+                      value={options[name]}
+                      onChange={(val) => {
+                        setOptions((prev) => ({
+                          ...prev,
+                          [name]: val,
+                        }))
+                      }}
+                    >
+                      <Label className='capitalize'>{name}</Label>
+                      <div className='mt-3 space-y-4'>
+                        {selectableOptions.map((option) => (
+                          <Radio
+                            key={option.value}
+                            value={option}
+                            className={({ checked }) =>
+                              cn(
+                                'relative block cursor-pointer rounded-lg bg-white px-6 py-5 border-2 border-zinc-200 focus:outline-none outline-none sm:flex sm:justify-between transition-color duration-100 ease-linear',
+                                {
+                                  'border-primary': checked,
+                                }
+                              )
+                            }
+                          >
+                            <span className='flex items-center'>
+                              <span className='flex flex-col text-sm'>
+                                <RadioLabel
+                                  className='font-medium text-gray-900'
+                                  as='span'
+                                >
+                                  {option.label}
+                                </RadioLabel>
+
+                                {option.description ? (
+                                  <Description
+                                    as='span'
+                                    className='text-gray-500'
+                                  >
+                                    <span className='block sm:inline'>
+                                      {option.description}
+                                    </span>
+                                  </Description>
+                                ) : null}
+                              </span>
+                            </span>
+                          </Radio>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  )
+                )}
               </div>
             </div>
           </div>
