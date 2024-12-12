@@ -41,7 +41,7 @@ enum CaseColor {
 
 model User {
   id    String  @id @default(cuid())
-  email String  @unique
+  email String
   Order Order[]
 
   createdAt DateTime @default(now())

@@ -7,15 +7,13 @@ export const getAuthStatus = async () => {
   const { getUser } = getKindeServerSession()
   const user = await getUser()
 
-  console.log(user.email)
-
   if (!user?.id || !user.email) {
     throw new Error('Invalid user data')
   }
 
   const existingUser = await db.user.findUnique({
     where: {
-      email: user.email,
+      id: user.id,
     },
   })
 
