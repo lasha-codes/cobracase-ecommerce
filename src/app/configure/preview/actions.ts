@@ -4,7 +4,7 @@ import { BASE_PRICE, PRODUCT_PRICES } from '@/config/products'
 import { db } from '@/db'
 import { stripe } from '@/lib/stripe'
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
-import { Order } from '@prisma/client'
+import { Order, User } from '@prisma/client'
 
 export const createCheckoutSession = async ({
   configId,
@@ -22,10 +22,28 @@ export const createCheckoutSession = async ({
   }
 
   const { getUser } = getKindeServerSession()
-  const user = await getUser()
+  const kindeUser = await getUser()
 
-  if (!user) {
+  if (!kindeUser) {
     throw new Error('Your need to be logged in')
+  }
+
+  let user: User
+
+  const existingUser = await db.user.findUnique({
+    where: {
+      email: kindeUser.email!,
+    },
+  })
+
+  if (existingUser) {
+    user = existingUser
+  } else {
+    user = await db.user.create({
+      data: {
+        email: kindeUser.email!,
+      },
+    })
   }
 
   const { finish, material } = configuration
@@ -68,8 +86,8 @@ export const createCheckoutSession = async ({
   const stripeSession = await stripe.checkout.sessions.create({
     success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/thank-you?orderId=${order.id}`,
     cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/configure/preview?id=${configuration.id}`,
-    payment_method_types: ['card', 'paypal'],
     mode: 'payment',
+    payment_method_types: ['card'],
     shipping_address_collection: { allowed_countries: ['DE', 'US', 'GE'] },
     metadata: {
       userId: user.id,
