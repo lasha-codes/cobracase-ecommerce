@@ -1,11 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getConfiguration } from '@/app/services'
 import { notFound } from 'next/navigation'
 import DesignPreview from './DesignPreview'
 
 interface PageProps {
-  searchParams: {
-    [key: string]: string | string[] | undefined
-  }
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 const Page = async ({ searchParams }: PageProps) => {

@@ -85,5 +85,3 @@ export const createCheckoutSession = async ({
 
   return { url: stripeSession.url }
 }
-
-// stop - 8:43:28
