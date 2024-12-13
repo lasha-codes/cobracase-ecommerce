@@ -20,7 +20,7 @@ const DesignPreview = ({ configuration }: { configuration: Configuration }) => {
   const router = useRouter()
   const { toast } = useToast()
   const { id } = configuration
-  const { user } = useKindeBrowserClient()
+  const { isAuthenticated } = useKindeBrowserClient()
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false)
 
   const [showConfetti, setShowConfetti] = useState<boolean>(false)
@@ -60,7 +60,7 @@ const DesignPreview = ({ configuration }: { configuration: Configuration }) => {
   })
 
   const handleCheckout = () => {
-    if (user) {
+    if (isAuthenticated) {
       createPaymentSession({ configId: id })
     } else {
       localStorage.setItem('configurationId', id)
