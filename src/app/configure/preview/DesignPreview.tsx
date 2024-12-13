@@ -86,7 +86,7 @@ const DesignPreview = ({ configuration }: { configuration: Configuration }) => {
 
       <LoginModal isOpen={isLoginModalOpen} setIsOpen={setIsLoginModalOpen} />
 
-      <div className='mt-20 grid grid-cols-1 text-sm sm:grid-cols-12 sm:grid-rows-1 sm:gap-x-6 md:gapxp-8 lg:gap-x-12'>
+      <div className='mt-20 grid grid-cols-1 text-sm sm:grid-cols-12 sm:grid-rows-1 sm:gap-x-6 md:gap-x-8 p-8 lg:gap-x-12'>
         <div className='sm:col-span-4 md:col-span-3 md:row-span-2 md:row-end-2'>
           <Phone
             className={cn(`bg-${tw}`)}
@@ -119,7 +119,7 @@ const DesignPreview = ({ configuration }: { configuration: Configuration }) => {
               <p className='font-medium text-zinc-950'>Materials</p>
               <ol className='mt-3 text-zinc-700 list-disc list-inside'>
                 <li>High-quality, durable material</li>
-                <li>Scratch and fingerprint resistand coating</li>
+                <li>Scratch and fingerprint resistant coating</li>
               </ol>
             </div>
           </div>

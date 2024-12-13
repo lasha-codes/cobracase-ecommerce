@@ -68,7 +68,7 @@ export const POST = async (req: Request) => {
         isPaid: true,
         shippingAddress: {
           create: {
-            name: paymentSession.customer_details?.name || 'uknown',
+            name: paymentSession.customer_details?.name || 'unknown',
             city: shippingDetails.city,
             state: shippingDetails.state,
             postalCode: shippingDetails.postal_code,
@@ -78,7 +78,7 @@ export const POST = async (req: Request) => {
         },
         billingAddress: {
           create: {
-            name: paymentSession.customer_details?.name || 'uknown',
+            name: paymentSession.customer_details?.name || 'unknown',
             city: billingDetails.city,
             state: billingDetails.state,
             postalCode: billingDetails.postal_code,
