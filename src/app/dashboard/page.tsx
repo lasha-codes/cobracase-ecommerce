@@ -20,6 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import StatusDropdown from './StatusDropdown'
 
 const Page = async () => {
   const { getUser } = getKindeServerSession()
@@ -132,7 +133,9 @@ const Page = async () => {
                       {order.User.email}
                     </div>
                   </TableCell>
-                  <TableCell className='hidden md:table-cell'>status</TableCell>
+                  <TableCell className='hidden md:table-cell'>
+                    <StatusDropdown id={order.id} orderStatus={order.status} />
+                  </TableCell>
                   <TableCell className='hidden md:table-cell'>
                     {order.createdAt.toLocaleDateString()}
                   </TableCell>
