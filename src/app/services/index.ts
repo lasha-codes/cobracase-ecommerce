@@ -51,3 +51,22 @@ export const getConfiguration = async (id: string) => {
 
   return configuration
 }
+
+export const getOrders = async () => {
+  const orders = await db.order.findMany({
+    where: {
+      isPaid: true,
+      createdAt: {
+        gte: new Date(new Date().setDate(new Date().getDate() - 7)),
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    include: {
+      User: true,
+      shippingAddress: true,
+    },
+  })
+  return orders
+}
