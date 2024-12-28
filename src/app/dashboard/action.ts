@@ -21,5 +21,3 @@ export const changeOrderStatus = async ({
 }
 
 // stop - 11:11:24
-
-console.log('nr')
